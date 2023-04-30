@@ -23,7 +23,7 @@ class RestViewModel @Inject constructor(
         getRestStr()
     }
 
-    fun getRestStr() {
+    private fun getRestStr() {
         CoroutineScope(Dispatchers.IO).launch {
             val rest = async { restRepository.getRest() }
             val unit = async { getRestUnit() }
@@ -37,7 +37,7 @@ class RestViewModel @Inject constructor(
         }
     }
 
-    private fun getRestUnit() = "бел. руб."
+    private fun getRestUnit() = "BY"
 
     private fun getFormatRestStr(rest: Float, unit: String) = "${DecimalFormat("##.##").format(rest)} $unit"
 }

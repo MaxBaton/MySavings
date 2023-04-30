@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="margin_floating_action_button">16dp</dimen>
+    <dimen name="text_size_rest">30sp</dimen>
+    <dimen name="margin_top_rest">30sp</dimen>
+</resources>
