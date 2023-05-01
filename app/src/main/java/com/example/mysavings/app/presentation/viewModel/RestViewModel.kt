@@ -85,4 +85,23 @@ class RestViewModel @Inject constructor(
             }
         }
     }
+
+    fun addAdditionalRest(additionalRest: Float) {
+        val _rest = mutableRestLiveData.value
+        _rest?.let { rest ->
+            scopeIO.launch {
+                rest.rest += additionalRest
+                val isUpdate = restRepository.update(rest = rest)
+                viewModelScope.launch {
+                    if (isUpdate) {
+                        mutableRestLiveData.value = rest
+                        mutableRestStrLiveData.value = getFormatRestStr(
+                            rest = rest.rest,
+                            unit = mutableUnitLiveData.value ?: ""
+                        )
+                    }
+                }
+            }
+        }
+    }
 }

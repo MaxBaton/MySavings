@@ -5,8 +5,10 @@
     <string name="dialog_add_modes_title">Варианты добавления</string>
     <string name="dialog_add_ed_rest_et_hint">Остаток</string>
     <string name="dialog_add_ed_rest_title">Изменить остаток</string>
+    <string name="dialog_add_add_rest_title">Добавить остаток</string>
 <!--    Dialog Buttons-->
     <string name="dialog_btn_change">Изменить</string>
+    <string name="dialog_btn_add">Добавить</string>
     <string name="dialog_btn_cancel">Отмена</string>
 <!--    Enums-->
     <string name="enum_add_rest_name">Остаток</string>

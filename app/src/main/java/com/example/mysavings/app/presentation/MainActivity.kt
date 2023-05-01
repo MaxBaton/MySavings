@@ -11,6 +11,7 @@ import com.example.mysavings.app.presentation.common.hideKeyboard
 import com.example.mysavings.app.presentation.common.showShortToast
 import com.example.mysavings.app.presentation.common.toggleKeyboard
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
+import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             fabEd.setOnClickListener {
-                val (dialog, dialogBinding) = this@MainActivity.createAddEdRestDialog(restViewModel = restViewModel)
+                val (dialog, dialogBinding) = this@MainActivity.createAddEdRestDialog(mode = EnumRestDialogMode.EDIT.restDialogMode)
                 dialog.setOnShowListener { dialogInterface ->
                     this@MainActivity.toggleKeyboard()
 
