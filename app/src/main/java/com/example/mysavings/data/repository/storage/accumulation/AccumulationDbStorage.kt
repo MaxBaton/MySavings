@@ -1,7 +1,7 @@
 package com.example.mysavings.data.repository.storage.accumulation
 
 import com.example.mysavings.data.db.dao.AccumulationDao
-import com.example.mysavings.data.models.AccumulationData
+import com.example.mysavings.data.models.db.AccumulationData
 
 class AccumulationDbStorage(private val accumulationDao: AccumulationDao): AccumulationStorage {
     override suspend fun getAccumulation(): MutableList<AccumulationData>? {

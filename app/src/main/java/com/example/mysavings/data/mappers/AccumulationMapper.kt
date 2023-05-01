@@ -1,6 +1,6 @@
 package com.example.mysavings.data.mappers
 
-import com.example.mysavings.data.models.AccumulationData
+import com.example.mysavings.data.models.db.AccumulationData
 import com.example.mysavings.domain.models.Accumulation
 
 fun Accumulation.mapToAccumulationData(): AccumulationData {

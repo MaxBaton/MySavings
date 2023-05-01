@@ -1,14 +1,20 @@
 package com.example.mysavings.app.presentation
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mysavings.R
-import com.example.mysavings.app.presentation.common.createModeDialogWithRecyclerView
+import com.example.mysavings.app.presentation.common.dialogs.createAddEdRestDialog
+import com.example.mysavings.app.presentation.common.dialogs.createAddModeDialog
+import com.example.mysavings.app.presentation.common.hideKeyboard
 import com.example.mysavings.app.presentation.common.showShortToast
+import com.example.mysavings.app.presentation.common.toggleKeyboard
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
 import com.example.mysavings.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -26,12 +32,29 @@ class MainActivity : AppCompatActivity() {
             }
 
             fabAdd.setOnClickListener {
-                val dialog = this@MainActivity.createModeDialogWithRecyclerView()
+                val dialog = this@MainActivity.createAddModeDialog()
                 dialog.show()
             }
 
             fabEd.setOnClickListener {
-                this@MainActivity.showShortToast(text = "ed")
+                val (dialog, dialogBinding) = this@MainActivity.createAddEdRestDialog(restViewModel = restViewModel)
+                dialog.setOnShowListener { dialogInterface ->
+                    this@MainActivity.toggleKeyboard()
+
+                    val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    btnPositive.setOnClickListener {
+                        val restStr = dialogBinding.etAddRest.text.toString().trim()
+                        if (restStr == "") {
+                            this@MainActivity.showShortToast(text = getString(R.string.toast_blank_rest))
+                            return@setOnClickListener
+                        }else {
+                            val restFloat = restStr.toFloat()
+                            restViewModel.changeRest(newRest = restFloat)
+                            dialogInterface.dismiss()
+                        }
+                    }
+                }
+                dialog.show()
             }
         }
     }

@@ -1,7 +1,7 @@
 package com.example.mysavings.data.repository.storage.replenishment
 
 import com.example.mysavings.data.db.dao.ReplenishmentDao
-import com.example.mysavings.data.models.ReplenishmentData
+import com.example.mysavings.data.models.db.ReplenishmentData
 
 class ReplenishmentDbStorage(private val replenishmentDao: ReplenishmentDao): ReplenishmentStorage {
     override suspend fun getAllReplenishments(): MutableList<ReplenishmentData>? {

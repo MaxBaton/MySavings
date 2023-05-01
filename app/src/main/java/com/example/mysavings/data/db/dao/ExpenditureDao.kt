@@ -1,7 +1,7 @@
 package com.example.mysavings.data.db.dao
 
 import androidx.room.*
-import com.example.mysavings.data.models.ExpenditureData
+import com.example.mysavings.data.models.db.ExpenditureData
 
 @Dao
 interface ExpenditureDao {

@@ -1,6 +1,6 @@
 package com.example.mysavings.data.repository.storage.replenishment
 
-import com.example.mysavings.data.models.ReplenishmentData
+import com.example.mysavings.data.models.db.ReplenishmentData
 
 interface ReplenishmentStorage {
     suspend fun getAllReplenishments(): MutableList<ReplenishmentData>?

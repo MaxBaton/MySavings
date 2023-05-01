@@ -1,6 +1,6 @@
 package com.example.mysavings.data.repository.storage.expenditure
 
-import com.example.mysavings.data.models.ExpenditureData
+import com.example.mysavings.data.models.db.ExpenditureData
 
 interface ExpenditureStorage {
     suspend fun getExpenses(): MutableList<ExpenditureData>?

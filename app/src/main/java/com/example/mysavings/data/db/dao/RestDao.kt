@@ -1,12 +1,12 @@
 package com.example.mysavings.data.db.dao
 
 import androidx.room.*
-import com.example.mysavings.data.models.RestData
+import com.example.mysavings.data.models.db.RestData
 
 @Dao
 interface RestDao {
-    @Query("select rest from restData")
-    fun getRest(): Float
+    @Query("select * from restData")
+    fun getRest(): RestData
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun add(restData: RestData)

@@ -1,14 +1,14 @@
 package com.example.mysavings.data.repository.storage.rest
 
 import com.example.mysavings.data.db.dao.RestDao
-import com.example.mysavings.data.models.RestData
+import com.example.mysavings.data.models.db.RestData
 
 class RestDbStorage(private val restDao: RestDao): RestStorage {
-    override suspend fun getRest(): Float {
+    override suspend fun getRest(): RestData? {
         return try {
             restDao.getRest()
         }catch (e: Exception) {
-            0f
+            null
         }
     }
 

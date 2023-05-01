@@ -1,6 +1,6 @@
 package com.example.mysavings.data.repository.storage.accumulation
 
-import com.example.mysavings.data.models.AccumulationData
+import com.example.mysavings.data.models.db.AccumulationData
 
 interface AccumulationStorage {
     suspend fun getAccumulation(): MutableList<AccumulationData>?

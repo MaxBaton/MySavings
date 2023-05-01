@@ -1,4 +1,4 @@
-package com.example.mysavings.data.models
+package com.example.mysavings.data.models.db
 
 import androidx.room.Entity
 import androidx.room.ForeignKey

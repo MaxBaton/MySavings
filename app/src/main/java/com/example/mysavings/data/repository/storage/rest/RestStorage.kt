@@ -1,9 +1,9 @@
 package com.example.mysavings.data.repository.storage.rest
 
-import com.example.mysavings.data.models.RestData
+import com.example.mysavings.data.models.db.RestData
 
 interface RestStorage {
-    suspend fun getRest(): Float
+    suspend fun getRest(): RestData?
 
     suspend fun add(restData: RestData): Boolean
 

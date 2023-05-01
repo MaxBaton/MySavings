@@ -1,7 +1,7 @@
 package com.example.mysavings.data.repository.storage.expenditure
 
 import com.example.mysavings.data.db.dao.ExpenditureDao
-import com.example.mysavings.data.models.ExpenditureData
+import com.example.mysavings.data.models.db.ExpenditureData
 
 class ExpenditureDbStorage(private val expenditureDao: ExpenditureDao): ExpenditureStorage {
     override suspend fun getExpenses(): MutableList<ExpenditureData>? {
