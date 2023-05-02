@@ -9,4 +9,5 @@
 <!--    Dialog input-->
     <dimen name="margin_start_end_et_dialog">50dp</dimen>
     <dimen name="margin_top_et_dialog">10dp</dimen>
+    <dimen name="text_size_et_dialog">15sp</dimen>
 </resources>

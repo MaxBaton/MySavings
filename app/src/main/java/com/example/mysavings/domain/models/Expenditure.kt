@@ -1,8 +1,8 @@
 package com.example.mysavings.domain.models
 
 data class Expenditure(
-    var id: Int,
+    val id: Int = 0,
     var date: String,
     var sum: Float = 0f,
-    var text: String = ""
+    var description: String = ""
 )

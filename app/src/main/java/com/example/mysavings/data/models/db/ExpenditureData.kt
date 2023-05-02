@@ -9,5 +9,5 @@ data class ExpenditureData(
     var id: Int,
     var date: String,
     var sum: Float = 0f,
-    var text: String = ""
+    var description: String = ""
 )

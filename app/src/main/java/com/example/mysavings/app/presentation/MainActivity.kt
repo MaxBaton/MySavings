@@ -7,20 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.mysavings.R
 import com.example.mysavings.app.presentation.common.dialogs.createAddEdRestDialog
 import com.example.mysavings.app.presentation.common.dialogs.createAddModeDialog
-import com.example.mysavings.app.presentation.common.hideKeyboard
 import com.example.mysavings.app.presentation.common.showShortToast
 import com.example.mysavings.app.presentation.common.toggleKeyboard
+import com.example.mysavings.app.presentation.viewModel.ExpenditureViewModel
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent
-import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val restViewModel: RestViewModel by viewModels()
+    private val expenditureViewModel: ExpenditureViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,6 +29,12 @@ class MainActivity : AppCompatActivity() {
         with(binding) {
             restViewModel.restStrLiveData.observe(this@MainActivity) { restStr ->
                 textViewRest.text = restStr
+            }
+
+            expenditureViewModel.expensesLiveData.observe(this@MainActivity) { expenses ->
+                expenses?.forEach {
+
+                }
             }
 
             fabAdd.setOnClickListener {

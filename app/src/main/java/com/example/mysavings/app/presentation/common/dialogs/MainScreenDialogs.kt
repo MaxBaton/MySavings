@@ -8,9 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysavings.R
-import com.example.mysavings.app.presentation.common.hideKeyboard
 import com.example.mysavings.app.presentation.common.showShortToast
+import com.example.mysavings.app.presentation.viewModel.ExpenditureViewModel
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
+import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.data.data.EnumAddMode
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.DialogAddModeBinding
@@ -62,7 +63,42 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                 }
                 dialog.show()
             }
-            EnumAddMode.EXPENSES -> this.showShortToast(text = "expenses")
+            EnumAddMode.EXPENSES -> {
+                val expenditureViewModel: ExpenditureViewModel by this.viewModels()
+
+                val (dialog, dialogBinding) = this.createAddEdExpenditureDialog()
+                dialog.setOnShowListener { dialogInterface ->
+                    val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    btnPositive.setOnClickListener {
+                        val sumStr = dialogBinding.etAddMoneyExpensesSum.text.toString().trim()
+                        val description = dialogBinding.etAddMoneyExpensesDescription.text.toString().trim()
+                        val date = dialogBinding.etAddMoneyExpensesDate.text.toString().trim()
+
+                        if (sumStr.isEmpty()) {
+                            this.showShortToast(text = getString(R.string.toast_blank_sum))
+                            return@setOnClickListener
+                        }
+
+                        val currRest = restViewModel.restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
+                        val sumFloat = sumStr.toFloat()
+                        val newRest = currRest - sumFloat
+                        if (newRest < 0) {
+                            this.showShortToast(text = getString(R.string.toast_too_big_expenditure))
+                            dialogBinding.etAddMoneyExpensesSum.requestFocus()
+                            return@setOnClickListener
+                        }
+
+                        expenditureViewModel.addExpenditure(
+                            sum = sumFloat,
+                            description = description,
+                            date = date
+                        )
+                        restViewModel.changeRest(newRest = newRest)
+                        dialogInterface.dismiss()
+                    }
+                }
+                dialog.show()
+            }
             EnumAddMode.ACCUMULATIONS -> this.showShortToast(text = "accumualtion")
         }
     }

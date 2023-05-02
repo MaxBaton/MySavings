@@ -8,7 +8,7 @@ fun Expenditure.mapToExpenditureData(): ExpenditureData {
         id = this.id,
         date = this.date,
         sum = this.sum,
-        text = this.text
+        description = this.description
     )
 }
 
@@ -28,7 +28,7 @@ fun ExpenditureData.mapToExpenditure(): Expenditure {
         id = this.id,
         date = this.date,
         sum = this.sum,
-        text = this.text
+        description = this.description
     )
 }
 

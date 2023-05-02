@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="MySavings_TxtInputDialogStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_et_dialog</item>
+        <item name="android:layout_marginStart">@dimen/margin_start_end_et_dialog</item>
+        <item name="android:layout_marginEnd">@dimen/margin_start_end_et_dialog</item>
+        <item name="endIconMode">clear_text</item>
+    </style>
+
+    <style name="MySavings_EditTextDialogStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:textSize">@dimen/text_size_et_dialog</item>
+    </style>
+
+</resources>
