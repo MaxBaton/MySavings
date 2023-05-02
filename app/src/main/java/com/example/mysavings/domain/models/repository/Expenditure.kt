@@ -1,4 +1,4 @@
-package com.example.mysavings.domain.models
+package com.example.mysavings.domain.models.repository
 
 data class Expenditure(
     val id: Int = 0,

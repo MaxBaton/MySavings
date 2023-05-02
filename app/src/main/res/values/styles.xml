@@ -16,4 +16,32 @@
         <item name="android:textSize">@dimen/text_size_et_dialog</item>
     </style>
 
+    <style name="MySavings_GuideLineVertical">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="MySavings_GuideLineVertical_ItemExpenditureSum" parent="MySavings_GuideLineVertical">
+        <item name="layout_constraintGuide_percent">0.55</item>
+    </style>
+
+    <style name="MySavings_GuideLineVertical_ItemExpenditureDate" parent="MySavings_GuideLineVertical">
+        <item name="layout_constraintGuide_percent">0.3</item>
+    </style>
+
+    <style name="MySavings_TextViewItemExpenditure">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/text_size_item_expenditure</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginTop">@dimen/margin_top_bottom_item_expenditure</item>
+        <item name="android:layout_marginBottom">@dimen/margin_top_bottom_item_expenditure</item>
+    </style>
+
+    <style name="MySavings_TextViewItemExpenditureHeader" parent="MySavings_TextViewItemExpenditure">
+        <item name="android:textSize">@dimen/text_size_item_expenditure_header</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
 </resources>

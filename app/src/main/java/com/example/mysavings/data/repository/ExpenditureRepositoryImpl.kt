@@ -3,7 +3,7 @@ package com.example.mysavings.data.repository
 import com.example.mysavings.data.mappers.mapToExpenditureData
 import com.example.mysavings.data.mappers.mapToListExpenditure
 import com.example.mysavings.data.repository.storage.expenditure.ExpenditureStorage
-import com.example.mysavings.domain.models.Expenditure
+import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.repository.ExpenditureRepository
 
 class ExpenditureRepositoryImpl(private val expenditureStorage: ExpenditureStorage): ExpenditureRepository {

@@ -16,6 +16,8 @@ import com.example.mysavings.data.data.EnumAddMode
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.DialogAddModeBinding
 import com.example.mysavings.databinding.ItemAddModeBinding
+import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
+import com.example.mysavings.domain.usecase.expenditure.EnumFailExpenditureData
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
@@ -65,6 +67,7 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
             }
             EnumAddMode.EXPENSES -> {
                 val expenditureViewModel: ExpenditureViewModel by this.viewModels()
+                val checkCorrectExpenditureData = CheckCorrectExpenditureData()
 
                 val (dialog, dialogBinding) = this.createAddEdExpenditureDialog()
                 dialog.setOnShowListener { dialogInterface ->
@@ -73,28 +76,34 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                         val sumStr = dialogBinding.etAddMoneyExpensesSum.text.toString().trim()
                         val description = dialogBinding.etAddMoneyExpensesDescription.text.toString().trim()
                         val date = dialogBinding.etAddMoneyExpensesDate.text.toString().trim()
-
-                        if (sumStr.isEmpty()) {
-                            this.showShortToast(text = getString(R.string.toast_blank_sum))
-                            return@setOnClickListener
-                        }
-
                         val currRest = restViewModel.restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
-                        val sumFloat = sumStr.toFloat()
-                        val newRest = currRest - sumFloat
-                        if (newRest < 0) {
-                            this.showShortToast(text = getString(R.string.toast_too_big_expenditure))
-                            dialogBinding.etAddMoneyExpensesSum.requestFocus()
-                            return@setOnClickListener
-                        }
 
-                        expenditureViewModel.addExpenditure(
-                            sum = sumFloat,
-                            description = description,
-                            date = date
+                        val isCorrectData = checkCorrectExpenditureData.check(
+                            sumStr = sumStr,
+                            currRest = currRest
                         )
-                        restViewModel.changeRest(newRest = newRest)
-                        dialogInterface.dismiss()
+
+                        when (isCorrectData) {
+                            EnumFailExpenditureData.INCORRECT_SUM -> {
+                                this.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                                dialogBinding.etAddMoneyExpensesSum.requestFocus()
+                                return@setOnClickListener
+                            }
+                            EnumFailExpenditureData.TOO_BIG_EXPENDITURE -> {
+                                this.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                                dialogBinding.etAddMoneyExpensesSum.requestFocus()
+                                return@setOnClickListener
+                            }
+                            EnumFailExpenditureData.ALL_OK -> {
+                                expenditureViewModel.addExpenditure(
+                                    sum = sumStr.toFloat(),
+                                    description = description,
+                                    date = date,
+                                    restViewModel = restViewModel
+                                )
+                                dialogInterface.dismiss()
+                            }
+                        }
                     }
                 }
                 dialog.show()

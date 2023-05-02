@@ -3,7 +3,7 @@ package com.example.mysavings.data.repository
 import com.example.mysavings.data.mappers.mapToListReplenishment
 import com.example.mysavings.data.mappers.mapToReplenishmentData
 import com.example.mysavings.data.repository.storage.replenishment.ReplenishmentStorage
-import com.example.mysavings.domain.models.Replenishment
+import com.example.mysavings.domain.models.repository.Replenishment
 import com.example.mysavings.domain.repository.ReplenishmentRepository
 
 class ReplenishmentRepositoryImpl(private val replenishmentStorage: ReplenishmentStorage): ReplenishmentRepository {

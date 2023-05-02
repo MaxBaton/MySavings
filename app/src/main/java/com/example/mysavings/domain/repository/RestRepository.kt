@@ -1,6 +1,6 @@
 package com.example.mysavings.domain.repository
 
-import com.example.mysavings.domain.models.Rest
+import com.example.mysavings.domain.models.repository.Rest
 
 interface RestRepository {
     suspend fun getRest(): Rest?

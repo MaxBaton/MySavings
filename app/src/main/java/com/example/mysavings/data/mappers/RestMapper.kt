@@ -1,7 +1,7 @@
 package com.example.mysavings.data.mappers
 
 import com.example.mysavings.data.models.db.RestData
-import com.example.mysavings.domain.models.Rest
+import com.example.mysavings.domain.models.repository.Rest
 
 fun Rest.mapToRestData(): RestData {
     return RestData(

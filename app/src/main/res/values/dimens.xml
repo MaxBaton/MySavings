@@ -3,6 +3,7 @@
     <dimen name="margin_floating_action_button">16dp</dimen>
     <dimen name="text_size_rest">30sp</dimen>
     <dimen name="margin_top_rest">30sp</dimen>
+    <dimen name="margin_top_recycler_expenditure">15dp</dimen>
 <!--    Dialog recycler-->
     <dimen name="margin_top_item_dialog_recycler">15dp</dimen>
     <dimen name="text_size_item_dialog_recycler">20sp</dimen>
@@ -10,4 +11,8 @@
     <dimen name="margin_start_end_et_dialog">50dp</dimen>
     <dimen name="margin_top_et_dialog">10dp</dimen>
     <dimen name="text_size_et_dialog">15sp</dimen>
+<!--    Expenditure-->
+    <dimen name="margin_top_bottom_item_expenditure">15dp</dimen>
+    <dimen name="text_size_item_expenditure">18sp</dimen>
+    <dimen name="text_size_item_expenditure_header">25sp</dimen>
 </resources>

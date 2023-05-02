@@ -3,7 +3,7 @@ package com.example.mysavings.data.repository
 import com.example.mysavings.data.mappers.mapToRest
 import com.example.mysavings.data.mappers.mapToRestData
 import com.example.mysavings.data.repository.storage.rest.RestStorage
-import com.example.mysavings.domain.models.Rest
+import com.example.mysavings.domain.models.repository.Rest
 import com.example.mysavings.domain.repository.RestRepository
 
 class RestRepositoryImpl(private val restStorage: RestStorage): RestRepository {

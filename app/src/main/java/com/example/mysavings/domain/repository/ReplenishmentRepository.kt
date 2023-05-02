@@ -1,6 +1,6 @@
 package com.example.mysavings.domain.repository
 
-import com.example.mysavings.domain.models.Replenishment
+import com.example.mysavings.domain.models.repository.Replenishment
 
 interface ReplenishmentRepository {
     suspend fun getAllReplenishments(): MutableList<Replenishment>?

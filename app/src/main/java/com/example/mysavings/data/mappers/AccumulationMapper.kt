@@ -1,7 +1,7 @@
 package com.example.mysavings.data.mappers
 
 import com.example.mysavings.data.models.db.AccumulationData
-import com.example.mysavings.domain.models.Accumulation
+import com.example.mysavings.domain.models.repository.Accumulation
 
 fun Accumulation.mapToAccumulationData(): AccumulationData {
     return AccumulationData(

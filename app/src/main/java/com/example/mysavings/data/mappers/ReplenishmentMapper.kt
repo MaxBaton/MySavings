@@ -1,7 +1,7 @@
 package com.example.mysavings.data.mappers
 
 import com.example.mysavings.data.models.db.ReplenishmentData
-import com.example.mysavings.domain.models.Replenishment
+import com.example.mysavings.domain.models.repository.Replenishment
 
 fun Replenishment.mapToReplenishmentData(): ReplenishmentData {
     return ReplenishmentData(

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/text_view_date"
+        style="@style/MySavings_TextViewItemExpenditureHeader"
+        android:text="@string/dialog_add_ed_expenditure_et_hint_date"
+        app:layout_constraintEnd_toStartOf="@id/guid_line_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_view_sum"
+        style="@style/MySavings_TextViewItemExpenditureHeader"
+        android:text="@string/dialog_add_ed_expenditure_et_hint_sum"
+        app:layout_constraintEnd_toStartOf="@id/guid_line_sum"
+        app:layout_constraintStart_toEndOf="@id/guid_line_date"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/text_view_description"
+        style="@style/MySavings_TextViewItemExpenditureHeader"
+        android:text="@string/dialog_add_ed_expenditure_et_hint_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/guid_line_sum"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guid_line_date"
+        style="@style/MySavings_GuideLineVertical_ItemExpenditureDate" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guid_line_sum"
+        style="@style/MySavings_GuideLineVertical_ItemExpenditureSum" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

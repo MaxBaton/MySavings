@@ -3,7 +3,7 @@ package com.example.mysavings.data.repository
 import com.example.mysavings.data.mappers.mapToAccumulationData
 import com.example.mysavings.data.mappers.mapToListAccumulation
 import com.example.mysavings.data.repository.storage.accumulation.AccumulationStorage
-import com.example.mysavings.domain.models.Accumulation
+import com.example.mysavings.domain.models.repository.Accumulation
 import com.example.mysavings.domain.repository.AccumulationRepository
 
 class AccumulationRepositoryImpl(private val accumulationStorage: AccumulationStorage): AccumulationRepository {

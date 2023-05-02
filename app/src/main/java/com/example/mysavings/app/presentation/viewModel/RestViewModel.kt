@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mysavings.data.data.DefaultValues
-import com.example.mysavings.domain.models.Rest
+import com.example.mysavings.domain.models.repository.Rest
 import com.example.mysavings.domain.repository.RestRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

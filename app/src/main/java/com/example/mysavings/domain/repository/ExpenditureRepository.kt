@@ -1,6 +1,6 @@
 package com.example.mysavings.domain.repository
 
-import com.example.mysavings.domain.models.Expenditure
+import com.example.mysavings.domain.models.repository.Expenditure
 
 interface ExpenditureRepository {
     suspend fun getExpenses(): MutableList<Expenditure>?

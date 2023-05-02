@@ -9,17 +9,22 @@ import com.example.mysavings.R
 import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.databinding.DialogAddEdExpenditureBinding
 import com.example.mysavings.databinding.DialogDatePickerBinding
+import com.example.mysavings.domain.models.repository.Expenditure
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
 
-fun AppCompatActivity.createAddEdExpenditureDialog(): Pair<AlertDialog, DialogAddEdExpenditureBinding> {
+fun AppCompatActivity.createAddEdExpenditureDialog(expenditure: Expenditure? = null): Pair<AlertDialog, DialogAddEdExpenditureBinding> {
     val binding = DialogAddEdExpenditureBinding.inflate(LayoutInflater.from(this))
 
     with(binding) {
-        val currDateStr = getCurrentDateStr()
+        val currDateStr = expenditure?.date ?: getCurrentDateStr()
         etAddMoneyExpensesDate.setText(currDateStr, TextView.BufferType.EDITABLE)
+        expenditure?.let {
+            etAddMoneyExpensesSum.setText(it.sum.toString(), TextView.BufferType.EDITABLE)
+            etAddMoneyExpensesDescription.setText(it.description, TextView.BufferType.EDITABLE)
+        }
 
         etAddMoneyExpensesDate.setOnClickListener {
             val (dialogDate, dialogDateBinding) = createDatePickerDialog()
@@ -45,8 +50,13 @@ fun AppCompatActivity.createAddEdExpenditureDialog(): Pair<AlertDialog, DialogAd
     val dialog = AlertDialog.Builder(this).apply {
         setCancelable(false)
         setView(binding.root)
-        setTitle("title")
-        setPositiveButton("Ок", null)
+        val (title, btnPositiveTitle) = if (expenditure == null) {
+            getString(R.string.dialog_add_expenditure_title) to getString(R.string.dialog_btn_add)
+        } else {
+            getString(R.string.dialog_ed_expenditure_title) to getString(R.string.dialog_btn_change)
+        }
+        setTitle(title)
+        setPositiveButton(btnPositiveTitle, null)
         setNegativeButton(getString(R.string.dialog_btn_cancel)) { dialogInterface, _ ->
             dialogInterface.dismiss()
         }
@@ -58,10 +68,6 @@ fun AppCompatActivity.createAddEdExpenditureDialog(): Pair<AlertDialog, DialogAd
 
 fun AppCompatActivity.createDatePickerDialog(): Pair<AlertDialog, DialogDatePickerBinding> {
     val binding = DialogDatePickerBinding.inflate(LayoutInflater.from(this))
-
-    with(binding) {
-
-    }
 
     val dialog = AlertDialog.Builder(this).apply {
         setCancelable(false)

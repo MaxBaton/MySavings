@@ -3,9 +3,13 @@
 
 <!--    Dialogs-->
     <string name="dialog_add_modes_title">Варианты добавления</string>
+<!--    Dialog Rest-->
     <string name="dialog_add_ed_rest_et_hint">Остаток</string>
     <string name="dialog_add_ed_rest_title">Изменить остаток</string>
     <string name="dialog_add_add_rest_title">Добавить остаток</string>
+<!--    Dialog Expenditure-->
+    <string name="dialog_add_expenditure_title">Добавить расход</string>
+    <string name="dialog_ed_expenditure_title">Изменить расход</string>
     <string name="dialog_add_ed_expenditure_et_hint_sum">Сумма</string>
     <string name="dialog_add_ed_expenditure_et_hint_description">Описание</string>
     <string name="dialog_add_ed_expenditure_et_hint_date">Дата</string>

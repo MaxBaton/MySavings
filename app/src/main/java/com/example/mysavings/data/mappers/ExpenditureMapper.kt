@@ -1,7 +1,7 @@
 package com.example.mysavings.data.mappers
 
 import com.example.mysavings.data.models.db.ExpenditureData
-import com.example.mysavings.domain.models.Expenditure
+import com.example.mysavings.domain.models.repository.Expenditure
 
 fun Expenditure.mapToExpenditureData(): ExpenditureData {
     return ExpenditureData(
