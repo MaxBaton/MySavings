@@ -67,6 +67,10 @@ class RestViewModel @Inject constructor(
 
     private fun getFormatRestStr(rest: Float, unit: String) = "${DecimalFormat("##.##").format(rest)} $unit"
 
+    fun getCurrRest(): Float {
+        return restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
+    }
+
     fun changeRest(newRest: Float) {
         val _rest = mutableRestLiveData.value
         _rest?.let { rest ->

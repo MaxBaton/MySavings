@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
                         val newSumStr = dialogBinding.etAddMoneyExpensesSum.text.toString().trim()
                         val newDescription = dialogBinding.etAddMoneyExpensesDescription.text.toString().trim()
                         val newDate = dialogBinding.etAddMoneyExpensesDate.text.toString().trim()
-                        val currRest = restViewModel.restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
+                        val currRest = restViewModel.getCurrRest()
                         val oldSum = expenditure.sum
 
                         val isCorrectData = checkCorrectExpenditureData.checkEditable(
@@ -133,7 +133,12 @@ class MainActivity : AppCompatActivity() {
                                 expenditureViewModel.edExpenditure(
                                     expenditure = expenditure,
                                     oldSum = oldSum,
-                                    restViewModel = restViewModel
+                                    onSuccess = {
+                                        editCurrRest(newSumFloat, oldSum)
+                                    },
+                                    onError = {
+                                        this@MainActivity.showShortToast(text = getString(R.string.toast_error_edit))
+                                    }
                                 )
                                 dialogInterface.dismiss()
                             }
@@ -143,6 +148,16 @@ class MainActivity : AppCompatActivity() {
                 dialog.show()
             }
         }
+    }
+
+    private fun editCurrRest(newSumFloat: Float, oldSum: Float) {
+        val currRest = restViewModel.getCurrRest()
+        val newRest = if (newSumFloat > oldSum) {
+            currRest - (newSumFloat - oldSum)
+        }else {
+            currRest + (oldSum - newSumFloat)
+        }
+        restViewModel.changeRest(newRest = newRest)
     }
 
     inner class ExpenditureItem(val expenditure: Expenditure): BindableItem<ItemExpenditureBinding>() {

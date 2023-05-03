@@ -27,4 +27,6 @@
     <string name="toast_blank_rest">Введите остаток!</string>
     <string name="toast_blank_sum">Введите сумму!</string>
     <string name="toast_too_big_expenditure">Слишком большая сумма! Отрицательный остаток!</string>
+    <string name="toast_error_edit">Ошибка редактирования!</string>
+    <string name="toast_error_add">Ошибка добавления!</string>
 </resources>

@@ -76,7 +76,7 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                         val sumStr = dialogBinding.etAddMoneyExpensesSum.text.toString().trim()
                         val description = dialogBinding.etAddMoneyExpensesDescription.text.toString().trim()
                         val date = dialogBinding.etAddMoneyExpensesDate.text.toString().trim()
-                        val currRest = restViewModel.restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
+                        val currRest = restViewModel.getCurrRest()
 
                         val isCorrectData = checkCorrectExpenditureData.check(
                             sumStr = sumStr,
@@ -95,11 +95,20 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                                 return@setOnClickListener
                             }
                             EnumFailExpenditureData.ALL_OK -> {
+                                val sumFloat = sumStr.toFloat()
                                 expenditureViewModel.addExpenditure(
-                                    sum = sumStr.toFloat(),
+                                    sum = sumFloat,
                                     description = description,
                                     date = date,
-                                    restViewModel = restViewModel
+                                    onSuccess = {
+                                        updateCurrRest(
+                                            restViewModel = restViewModel,
+                                            expenditureSum = sumFloat
+                                        )
+                                    },
+                                    onError = {
+                                        this.showShortToast(text = getString(R.string.toast_error_add))
+                                    }
                                 )
                                 dialogInterface.dismiss()
                             }
@@ -120,6 +129,12 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
     }.create()
 
     return dialog
+}
+
+private fun updateCurrRest(restViewModel: RestViewModel, expenditureSum: Float) {
+    val currRest = restViewModel.getCurrRest()
+    val newRest = currRest - expenditureSum
+    restViewModel.changeRest(newRest = newRest)
 }
 
 class AddModeItem(

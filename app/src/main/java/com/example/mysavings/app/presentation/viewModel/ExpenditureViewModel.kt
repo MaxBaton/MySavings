@@ -36,7 +36,7 @@ class ExpenditureViewModel @Inject constructor(
         }
     }
 
-    fun addExpenditure(sum: Float, description: String, date: String, restViewModel: RestViewModel) {
+    fun addExpenditure(sum: Float, description: String, date: String, onSuccess: () -> Unit, onError: () -> Unit) {
         scopeIO.launch {
             val expenditure = Expenditure(
                 date = date,
@@ -45,39 +45,29 @@ class ExpenditureViewModel @Inject constructor(
             )
 
             val isAddExpenditure = expenditureRepository.add(expenditure = expenditure)
-            if (isAddExpenditure) {
-                viewModelScope.launch {
+            viewModelScope.launch {
+                if (isAddExpenditure) {
                     mutableExpensesLiveData.value?.add(expenditure)
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
-                    restViewModel.restLiveData?.value?.let { rest ->
-                        val newRest = rest.rest - sum
-                        restViewModel.changeRest(newRest = newRest)
-                    }
+                    onSuccess()
+                }else {
+                    onError()
                 }
             }
         }
     }
 
-    fun edExpenditure(expenditure: Expenditure, oldSum: Float, restViewModel: RestViewModel) {
+    fun edExpenditure(expenditure: Expenditure, oldSum: Float, onSuccess: () -> Unit, onError: () -> Unit) {
         scopeIO.launch {
             val isEditExpenditure = expenditureRepository.update(expenditure = expenditure)
-            if (isEditExpenditure) {
-                val currRest = restViewModel.restLiveData.value?.rest ?: DefaultValues.DEFAULT_REST
-                val newRest = if (oldSum > expenditure.sum) {
-                    currRest + (oldSum - expenditure.sum)
-                }else {
-                    currRest - (expenditure.sum - oldSum)
-                }
-
-                viewModelScope.launch {
+            viewModelScope.launch {
+                if (isEditExpenditure) {
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
-                    restViewModel.changeRest(newRest = newRest)
+                    onSuccess()
+                }else {
+                    onError()
                 }
             }
         }
-    }
-
-    private fun getIndexExpenditureInListById(id: Int): Expenditure? {
-        return mutableExpensesLiveData.value?.firstOrNull { it.id == id }
     }
 }
