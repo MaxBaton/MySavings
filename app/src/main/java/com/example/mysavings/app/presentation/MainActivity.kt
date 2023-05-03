@@ -23,9 +23,9 @@ import com.example.mysavings.app.presentation.viewModel.RestViewModel
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.ActivityMainBinding
 import com.example.mysavings.databinding.ItemExpenditureBinding
+import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
-import com.example.mysavings.domain.usecase.expenditure.EnumFailExpenditureData
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
@@ -144,17 +144,17 @@ class MainActivity : AppCompatActivity() {
                             )
 
                             when(isCorrectData) {
-                                EnumFailExpenditureData.INCORRECT_SUM -> {
-                                    this@MainActivity.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                                is FailExpenditure.IncorrectSum -> {
+                                    this@MainActivity.showShortToast(text = getString(isCorrectData.stringMessageId))
                                     dialogBinding.etAddMoneyExpensesSum.requestFocus()
                                     return@setOnClickListener
                                 }
-                                EnumFailExpenditureData.TOO_BIG_EXPENDITURE -> {
-                                    this@MainActivity.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                                is FailExpenditure.TooBigExpenditure -> {
+                                    this@MainActivity.showShortToast(text = getString(isCorrectData.stringMessageId))
                                     dialogBinding.etAddMoneyExpensesSum.requestFocus()
                                     return@setOnClickListener
                                 }
-                                EnumFailExpenditureData.ALL_OK -> {
+                                is FailExpenditure.AllOk -> {
                                     val newSumFloat = newSumStr.toFloat()
                                     expenditure.sum = newSumFloat
                                     expenditure.date = newDate

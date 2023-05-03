@@ -11,13 +11,12 @@ import com.example.mysavings.R
 import com.example.mysavings.app.presentation.common.showShortToast
 import com.example.mysavings.app.presentation.viewModel.ExpenditureViewModel
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
-import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.data.data.EnumAddMode
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.DialogAddModeBinding
 import com.example.mysavings.databinding.ItemAddModeBinding
+import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
-import com.example.mysavings.domain.usecase.expenditure.EnumFailExpenditureData
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
@@ -84,17 +83,17 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                         )
 
                         when (isCorrectData) {
-                            EnumFailExpenditureData.INCORRECT_SUM -> {
-                                this.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                            is FailExpenditure.IncorrectSum -> {
+                                this.showShortToast(text = getString(isCorrectData.stringMessageId))
                                 dialogBinding.etAddMoneyExpensesSum.requestFocus()
                                 return@setOnClickListener
                             }
-                            EnumFailExpenditureData.TOO_BIG_EXPENDITURE -> {
-                                this.showShortToast(text = getString(isCorrectData.failExpenditureData.stringMessageId))
+                            is FailExpenditure.TooBigExpenditure -> {
+                                this.showShortToast(text = getString(isCorrectData.stringMessageId))
                                 dialogBinding.etAddMoneyExpensesSum.requestFocus()
                                 return@setOnClickListener
                             }
-                            EnumFailExpenditureData.ALL_OK -> {
+                            is FailExpenditure.AllOk -> {
                                 val sumFloat = sumStr.toFloat()
                                 expenditureViewModel.addExpenditure(
                                     sum = sumFloat,
