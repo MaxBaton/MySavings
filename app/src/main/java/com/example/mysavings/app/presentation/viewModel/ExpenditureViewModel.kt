@@ -70,4 +70,28 @@ class ExpenditureViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteExpenses(expenses: List<Expenditure>, onSuccess: () -> Unit, onError: () -> Unit) {
+        if (expenses.isNotEmpty()) {
+            scopeIO.launch {
+                var isDeleteAll = true
+                expenses.forEach { expenditure ->
+                    val isDelete = expenditureRepository.delete(expenditure = expenditure)
+                    if (!isDelete && isDeleteAll) {
+                        isDeleteAll = false
+                    }else if (isDelete) {
+                        mutableExpensesLiveData.value?.remove(expenditure)
+                    }
+                }
+                viewModelScope.launch {
+                    if (isDeleteAll) {
+                        mutableExpensesLiveData.value = mutableExpensesLiveData.value
+                        onSuccess()
+                    }else {
+                        onError()
+                    }
+                }
+            }
+        }
+    }
 }

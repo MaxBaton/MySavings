@@ -150,5 +150,4 @@ class AddModeItem(
     override fun getLayout() = R.layout.item_add_mode
 
     override fun initializeViewBinding(view: View) = ItemAddModeBinding.bind(view)
-
 }
