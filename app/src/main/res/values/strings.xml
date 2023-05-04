@@ -14,6 +14,10 @@
     <string name="dialog_add_ed_expenditure_et_hint_description">Описание</string>
     <string name="dialog_add_ed_expenditure_et_hint_date">Дата</string>
     <string name="dialog_date_picker_title">Выбор даты</string>
+<!--    Dialog Accumulations-->
+    <string name="dialog_accumulation_list_title">Список накоплений</string>
+    <string name="dialog_add_accumulation_title">Добавление накопления</string>
+    <string name="dialog_add_accumulation_name">Наименование</string>
 <!--    Other Dialogs-->
     <string name="dialog_delete_expenses_title">Удаление</string>
     <string name="dialog_delete_expenses_message">Удалить выбранные расходы?</string>
@@ -30,10 +34,13 @@
 <!--    Toast-->
     <string name="toast_blank_rest">Введите остаток!</string>
     <string name="toast_blank_sum">Введите сумму!</string>
+    <string name="toast_blank_name">Введите имя!</string>
+    <string name="toast_incorrect_sum">Некорректная сумма!</string>
     <string name="toast_too_big_expenditure">Слишком большая сумма! Отрицательный остаток!</string>
     <string name="toast_error_edit">Ошибка редактирования!</string>
     <string name="toast_error_add">Ошибка добавления!</string>
     <string name="toast_successful_delete">Успешное удаление!</string>
+    <string name="toast_successful_add">Успешное добавление!</string>
     <string name="toast_error_delete">Ошибка удаления!</string>
 <!--    Menu-->
     <string name="menu_delete">Удалить</string>

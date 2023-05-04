@@ -9,20 +9,23 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysavings.R
 import com.example.mysavings.app.presentation.common.showShortToast
+import com.example.mysavings.app.presentation.viewModel.AccumulationsViewModel
 import com.example.mysavings.app.presentation.viewModel.ExpenditureViewModel
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
 import com.example.mysavings.data.data.EnumAddMode
 import com.example.mysavings.data.data.EnumRestDialogMode
-import com.example.mysavings.databinding.DialogAddModeBinding
-import com.example.mysavings.databinding.ItemAddModeBinding
+import com.example.mysavings.databinding.DialogRecyclerWithSimpleTextBinding
+import com.example.mysavings.databinding.ItemSimpleTextBinding
+import com.example.mysavings.domain.models.other.FailAccumulation
 import com.example.mysavings.domain.models.other.FailExpenditure
+import com.example.mysavings.domain.usecase.accumulation.CheckCorrectAccumulationData
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
 
 fun AppCompatActivity.createAddModeDialog(): AlertDialog {
-    val binding = DialogAddModeBinding.inflate(LayoutInflater.from(this))
+    val binding = DialogRecyclerWithSimpleTextBinding.inflate(LayoutInflater.from(this))
     val groupieAdapter = GroupieAdapter()
     val section = Section()
 
@@ -37,7 +40,7 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
 
     groupieAdapter.add(section)
 
-    binding.recyclerViewAddMode.apply {
+    binding.recyclerView.apply {
         layoutManager = LinearLayoutManager(this@createAddModeDialog, LinearLayoutManager.VERTICAL, false)
         addItemDecoration(DividerItemDecoration(this@createAddModeDialog, DividerItemDecoration.VERTICAL))
         adapter = groupieAdapter
@@ -116,7 +119,59 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                 }
                 dialog.show()
             }
-            EnumAddMode.ACCUMULATIONS -> this.showShortToast(text = "accumualtion")
+            EnumAddMode.ACCUMULATIONS -> {
+                val accumulationsViewModel: AccumulationsViewModel by this.viewModels()
+
+                val dialog = this.createListAccumulationsDialog()
+                dialog.setOnShowListener { dialogInterface ->
+                    val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                    btnPositive.setOnClickListener {
+                        val (dialog, dialogBinding) = this.createAddAccumulationDialog()
+                        dialog.setOnShowListener { dialogInterfaceAdd ->
+                            val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
+                            btnPositive.setOnClickListener {
+                                val name = dialogBinding.etAddAccumulationName.text.toString()
+                                val sumStr = dialogBinding.etAddAccumulationSum.text.toString()
+
+                                val checkData = CheckCorrectAccumulationData().check(
+                                    name = name,
+                                    sumStr = sumStr
+                                )
+
+                                when(checkData) {
+                                    is FailAccumulation.EmptySum -> {
+                                        dialogBinding.etAddAccumulationSum.requestFocus()
+                                        showShortToast(text = getString(checkData.stringMessageId))
+                                    }
+                                    is FailAccumulation.IncorrectSum -> {
+                                        dialogBinding.etAddAccumulationSum.requestFocus()
+                                        showShortToast(text = getString(checkData.stringMessageId))
+                                    }
+                                    is FailAccumulation.EmptyName -> {
+                                        dialogBinding.etAddAccumulationName.requestFocus()
+                                        showShortToast(text = getString(checkData.stringMessageId))
+                                    }
+                                    is FailAccumulation.AllOk -> {
+                                        accumulationsViewModel.addAccumulation(
+                                            name = name,
+                                            sum = sumStr.toFloat(),
+                                            onSuccess = {
+                                                showShortToast(text = getString(R.string.toast_successful_add))
+                                                dialogInterfaceAdd.dismiss()
+                                            },
+                                            onError = {
+                                                showShortToast(text = getString(R.string.toast_error_add))
+                                            }
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        dialog.show()
+                    }
+                }
+                dialog.show()
+            }
         }
     }
 
@@ -139,14 +194,14 @@ private fun updateCurrRest(restViewModel: RestViewModel, expenditureSum: Float) 
 class AddModeItem(
     private val activity: AppCompatActivity,
     val enumAddMode: EnumAddMode
-): BindableItem<ItemAddModeBinding>() {
-    override fun bind(viewBinding: ItemAddModeBinding, position: Int) {
+): BindableItem<ItemSimpleTextBinding>() {
+    override fun bind(viewBinding: ItemSimpleTextBinding, position: Int) {
         with(viewBinding) {
-            textViewModeName.text = activity.getString(enumAddMode.addMode.nameStringId)
+            textView.text = activity.getString(enumAddMode.addMode.nameStringId)
         }
     }
 
-    override fun getLayout() = R.layout.item_add_mode
+    override fun getLayout() = R.layout.item_simple_text
 
-    override fun initializeViewBinding(view: View) = ItemAddModeBinding.bind(view)
+    override fun initializeViewBinding(view: View) = ItemSimpleTextBinding.bind(view)
 }

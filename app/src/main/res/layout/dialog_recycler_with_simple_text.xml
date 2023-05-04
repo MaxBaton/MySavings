@@ -5,9 +5,9 @@
     android:layout_height="wrap_content">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_add_mode"
+        android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/item_add_mode"
+        tools:listitem="@layout/item_simple_text"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
