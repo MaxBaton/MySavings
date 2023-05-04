@@ -22,6 +22,7 @@ import com.example.mysavings.app.presentation.viewModel.ExpenditureViewModel
 import com.example.mysavings.app.presentation.viewModel.RestViewModel
 import com.example.mysavings.data.data.EnumRestDialogMode
 import com.example.mysavings.databinding.ActivityMainBinding
+import com.example.mysavings.databinding.DeleteItemsCancelLayoutBinding
 import com.example.mysavings.databinding.ItemExpenditureBinding
 import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.models.repository.Expenditure
@@ -34,6 +35,8 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
+    private lateinit var bindingActionBar: DeleteItemsCancelLayoutBinding
+
     private val restViewModel: RestViewModel by viewModels()
     private val expenditureViewModel: ExpenditureViewModel by viewModels()
     private val additionalViewModel: AdditionalViewModel by viewModels()
@@ -49,10 +52,24 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        additionalViewModel.isDeleteModeLiveData.observe(this) { isDeleteMode ->
+        bindingActionBar = DeleteItemsCancelLayoutBinding.inflate(layoutInflater)
+        bindingActionBar.imageViewCancel.setOnClickListener {
+            deleteExpenditureList.clear()
+            resetAllSelectionInRecyclerView()
+            additionalViewModel.isDeleteModeLiveData.value = !additionalViewModel.getIsDeleteMode()
+        }
+
+        additionalViewModel.isDeleteModeLiveData.observe(this@MainActivity) { isDeleteMode ->
             menu?.findItem(R.id.action_delete)?.isVisible = isDeleteMode
             menu?.findItem(R.id.action_select_all)?.isVisible = isDeleteMode
-            supportActionBar?.title = if (isDeleteMode) "" else getString(R.string.app_name)
+            if (isDeleteMode) {
+                supportActionBar?.setDisplayShowCustomEnabled(true)
+                supportActionBar?.customView = bindingActionBar.root
+                supportActionBar?.title = ""
+            }else {
+                supportActionBar?.setDisplayShowCustomEnabled(false)
+                supportActionBar?.title = getString(R.string.app_name)
+            }
         }
 
         with(binding) {
@@ -124,6 +141,7 @@ class MainActivity : AppCompatActivity() {
 
                     expenditureItem.isDeleteMode = !expenditureItem.isDeleteMode
                     section.notifyItemChanged(position)
+                    bindingActionBar.textViewCount.text = deleteExpenditureList.size.toString()
                 }else {
                     val checkCorrectExpenditureData = CheckCorrectExpenditureData()
 
@@ -192,6 +210,7 @@ class MainActivity : AppCompatActivity() {
                 deleteExpenditureList.add(expenditureItem.expenditure)
                 expenditureItem.isDeleteMode = !expenditureItem.isDeleteMode
                 section.notifyItemChanged(position)
+                bindingActionBar.textViewCount.text = deleteExpenditureList.size.toString()
 
                 true
             }
@@ -245,6 +264,7 @@ class MainActivity : AppCompatActivity() {
                         section.notifyItemChanged(i)
                     }
                 }
+                bindingActionBar.textViewCount.text = deleteExpenditureList.size.toString()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -276,6 +296,16 @@ class MainActivity : AppCompatActivity() {
                 expensesHeader.textViewDate.visibility = View.VISIBLE
                 expensesHeader.textViewSum.visibility = View.VISIBLE
                 expensesHeader.textViewDescription.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    private fun resetAllSelectionInRecyclerView() {
+        for (i in 0 until section.itemCount) {
+            val expenditureItem = section.getItem(i) as ExpenditureItem
+            if (expenditureItem.isDeleteMode) {
+                expenditureItem.isDeleteMode = false
+                section.notifyItemChanged(i)
             }
         }
     }
