@@ -10,6 +10,7 @@ import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.databinding.DialogAddEdExpenditureBinding
 import com.example.mysavings.databinding.DialogDatePickerBinding
 import com.example.mysavings.domain.models.repository.Expenditure
+import com.example.mysavings.domain.usecase.common.GetCurrentDate
 import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -19,7 +20,7 @@ fun AppCompatActivity.createAddEdExpenditureDialog(expenditure: Expenditure? = n
     val binding = DialogAddEdExpenditureBinding.inflate(LayoutInflater.from(this))
 
     with(binding) {
-        val currDateStr = expenditure?.date ?: getCurrentDateStr()
+        val currDateStr = expenditure?.date ?: GetCurrentDate().getStr()
         etAddMoneyExpensesDate.setText(currDateStr, TextView.BufferType.EDITABLE)
         expenditure?.let {
             etAddMoneyExpensesSum.setText(it.sum.toString(), TextView.BufferType.EDITABLE)

@@ -18,6 +18,8 @@
     <string name="dialog_accumulation_list_title">Список накоплений</string>
     <string name="dialog_add_accumulation_title">Добавление накопления</string>
     <string name="dialog_add_accumulation_name">Наименование</string>
+<!--    Dialog Replenishment-->
+    <string name="dialog_add_replenishment_title">Новое пополнение</string>
 <!--    Other Dialogs-->
     <string name="dialog_delete_expenses_title">Удаление</string>
     <string name="dialog_delete_expenses_message">Удалить выбранные расходы?</string>
@@ -42,6 +44,7 @@
     <string name="toast_successful_delete">Успешное удаление!</string>
     <string name="toast_successful_add">Успешное добавление!</string>
     <string name="toast_error_delete">Ошибка удаления!</string>
+    <string name="toast_error_add_accumulation">Ошибка пополнения накопления!</string>
 <!--    Menu-->
     <string name="menu_delete">Удалить</string>
     <string name="menu_select_all">Выделить все</string>

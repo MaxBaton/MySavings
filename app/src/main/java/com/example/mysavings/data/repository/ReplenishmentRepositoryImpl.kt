@@ -23,18 +23,18 @@ class ReplenishmentRepositoryImpl(private val replenishmentStorage: Replenishmen
         }
     }
 
-    override suspend fun add(replenishmentData: Replenishment): Boolean {
+    override suspend fun add(replenishment: Replenishment): Boolean {
         return try {
-            val replenishment = replenishmentData.mapToReplenishmentData()
+            val replenishment = replenishment.mapToReplenishmentData()
             replenishmentStorage.add(replenishment = replenishment)
         }catch (e: Exception) {
             false
         }
     }
 
-    override suspend fun update(replenishmentData: Replenishment): Boolean {
+    override suspend fun update(replenishment: Replenishment): Boolean {
         return try {
-            val replenishment = replenishmentData.mapToReplenishmentData()
+            val replenishment = replenishment.mapToReplenishmentData()
             replenishmentStorage.update(replenishment = replenishment)
         }catch (e: Exception) {
             false

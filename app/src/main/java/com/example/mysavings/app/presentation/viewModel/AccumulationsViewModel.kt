@@ -56,4 +56,19 @@ class AccumulationsViewModel @Inject constructor(
             }
         }
     }
+
+    fun addReplenishmentForAccumulation(sumAdd: Float, accumulation: Accumulation, onSuccess: () -> Unit, onError: () -> Unit) {
+        scopIO.launch {
+            accumulation.sum += sumAdd
+            val isUpdate = accumulationRepository.update(accumulation = accumulation)
+            viewModelScope.launch {
+                if (isUpdate) {
+                    mutableAccumulationsLiveData.value = mutableAccumulationsLiveData.value
+                    onSuccess()
+                }else {
+                    onError()
+                }
+            }
+        }
+    }
 }

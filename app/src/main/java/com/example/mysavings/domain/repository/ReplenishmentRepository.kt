@@ -7,9 +7,9 @@ interface ReplenishmentRepository {
 
     suspend fun getReplenishmentsForAccumulation(idAccumulation: Int): MutableList<Replenishment>?
 
-    suspend fun add(replenishmentData: Replenishment): Boolean
+    suspend fun add(replenishment: Replenishment): Boolean
 
-    suspend fun update(replenishmentData: Replenishment): Boolean
+    suspend fun update(replenishment: Replenishment): Boolean
 
     suspend fun delete(replenishmentData: Replenishment): Boolean
 }

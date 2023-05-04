@@ -90,11 +90,15 @@ class RestViewModel @Inject constructor(
         }
     }
 
-    fun addAdditionalRest(additionalRest: Float) {
+    fun addAdditionalRest(additionalRest: Float, isAdd: Boolean = true) {
         val _rest = mutableRestLiveData.value
         _rest?.let { rest ->
             scopeIO.launch {
-                rest.rest += additionalRest
+                if (isAdd) {
+                    rest.rest += additionalRest
+                }else {
+                    rest.rest -= additionalRest
+                }
                 val isUpdate = restRepository.update(rest = rest)
                 viewModelScope.launch {
                     if (isUpdate) {
