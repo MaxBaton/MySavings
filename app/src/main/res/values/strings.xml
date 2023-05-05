@@ -18,6 +18,10 @@
     <string name="dialog_accumulation_list_title">Список накоплений</string>
     <string name="dialog_add_accumulation_title">Добавление накопления</string>
     <string name="dialog_add_accumulation_name">Наименование</string>
+    <string name="dialog_delete_accumulation_title">Удаление накопления</string>
+    <string name="dialog_delete_accumulation_message">Удалить накопление?</string>
+    <string name="dialog_edit_accumulation_title">Редактирование накопления</string>
+    <string name="dialog_edit_accumulation_message">Редактировать накопление?</string>
 <!--    Dialog Replenishment-->
     <string name="dialog_add_replenishment_title">Новое пополнение</string>
 <!--    Other Dialogs-->
@@ -29,6 +33,7 @@
     <string name="dialog_btn_cancel">Отмена</string>
     <string name="dialog_btn_ok">Ок</string>
     <string name="dialog_btn_delete">Удалить</string>
+    <string name="dialog_btn_edit">Редактировать</string>
 <!--    Enums-->
     <string name="enum_add_rest_name">Остаток</string>
     <string name="enum_add_expenses_name">Расходы</string>
@@ -42,6 +47,7 @@
     <string name="toast_error_edit">Ошибка редактирования!</string>
     <string name="toast_error_add">Ошибка добавления!</string>
     <string name="toast_successful_delete">Успешное удаление!</string>
+    <string name="toast_successful_edit">Успешное редактирование!</string>
     <string name="toast_successful_add">Успешное добавление!</string>
     <string name="toast_error_delete">Ошибка удаления!</string>
     <string name="toast_error_add_accumulation">Ошибка пополнения накопления!</string>

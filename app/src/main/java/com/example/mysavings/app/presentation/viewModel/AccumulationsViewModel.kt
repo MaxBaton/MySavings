@@ -71,4 +71,43 @@ class AccumulationsViewModel @Inject constructor(
             }
         }
     }
+
+    fun deleteAccumulation(accumulation: Accumulation, onSuccess: () -> Unit, onError: () -> Unit) {
+        scopIO.launch {
+            val isDelete = accumulationRepository.delete(accumulation = accumulation)
+            viewModelScope.launch {
+                if (isDelete) {
+                    mutableAccumulationsLiveData.value?.remove(accumulation)
+                    mutableAccumulationsLiveData.value = mutableAccumulationsLiveData.value
+                    onSuccess()
+                }else {
+                    onError()
+                }
+            }
+        }
+    }
+
+    fun editAccumulation(id: Int, sumFloat: Float, name: String, onSuccess: () -> Unit, onError: () -> Unit) {
+        scopIO.launch {
+            val accumulation = Accumulation(
+                id = id,
+                name = name,
+                sum = sumFloat
+            )
+            val isEdit = accumulationRepository.update(accumulation = accumulation)
+            viewModelScope.launch {
+                if (isEdit) {
+                    val oldAccumulation = mutableAccumulationsLiveData.value?.find { it.id == id }
+                    oldAccumulation?.let {
+                        it.sum = sumFloat
+                        it.name = name
+                    }
+                    mutableAccumulationsLiveData.value = mutableAccumulationsLiveData.value
+                    onSuccess()
+                }else {
+                    onError()
+                }
+            }
+        }
+    }
 }

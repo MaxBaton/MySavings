@@ -9,4 +9,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background_layout">@color/white</color>
     <color name="delete_mode_in">#1078CA</color>
+    <color name="color_swipe_button_1">#001693</color>
+    <color name="color_swipe_button_2">#006C62</color>
 </resources>

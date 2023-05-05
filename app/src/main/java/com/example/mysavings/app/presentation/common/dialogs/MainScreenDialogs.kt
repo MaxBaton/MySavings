@@ -126,7 +126,7 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                 dialog.setOnShowListener { dialogInterface ->
                     val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     btnPositive.setOnClickListener {
-                        val (dialog, dialogBinding) = this.createAddAccumulationDialog()
+                        val (dialog, dialogBinding) = this.createAddEdAccumulationDialog()
                         dialog.setOnShowListener { dialogInterfaceAdd ->
                             val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                             btnPositive.setOnClickListener {
