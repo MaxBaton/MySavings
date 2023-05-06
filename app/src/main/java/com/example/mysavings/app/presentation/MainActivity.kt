@@ -27,10 +27,13 @@ import com.example.mysavings.databinding.ItemExpenditureBinding
 import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
+import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.LinkedList
+import java.util.Queue
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -46,6 +49,9 @@ class MainActivity : AppCompatActivity() {
     // Delete mode
     private var menu: Menu? = null
     private val deleteExpenditureList = mutableListOf<Expenditure>()
+    // Dialogs
+    private val allShowingDialogs: Queue<AlertDialog> = LinkedList()
+    private val queueDialogs = QueueDialogs(allShowingDialogs = allShowingDialogs)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -99,8 +105,9 @@ class MainActivity : AppCompatActivity() {
             }
 
             fabAdd.setOnClickListener {
-                val dialog = this@MainActivity.createAddModeDialog()
+                val dialog = this@MainActivity.createAddModeDialog(queueDialogs = queueDialogs)
                 dialog.show()
+                queueDialogs.add(dialog = dialog)
             }
 
             fabEd.setOnClickListener {
@@ -122,6 +129,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 dialog.show()
+                queueDialogs.add(dialog = dialog)
             }
 
             groupieAdapter.setOnItemClickListener { item, view ->
@@ -197,6 +205,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
                     dialog.show()
+                    queueDialogs.add(dialog = dialog)
                 }
             }
 
@@ -268,6 +277,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dismissAllShowingDialogs()
+    }
+
+    private fun addDialogsToQueue(dialog: AlertDialog) {
+        allShowingDialogs.add(dialog)
+        dialog.setOnDismissListener {
+            allShowingDialogs.remove(dialog)
+        }
+    }
+
+    private fun dismissAllShowingDialogs() {
+        allShowingDialogs.forEach {
+            if (it.isShowing) {
+                it.dismiss()
+            }
+        }
+        allShowingDialogs.clear()
     }
 
     private fun editCurrRest(newSumFloat: Float, oldSum: Float) {

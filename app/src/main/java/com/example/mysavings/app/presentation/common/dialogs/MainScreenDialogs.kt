@@ -20,11 +20,12 @@ import com.example.mysavings.domain.models.other.FailAccumulation
 import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.usecase.accumulation.CheckCorrectAccumulationData
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
+import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
 
-fun AppCompatActivity.createAddModeDialog(): AlertDialog {
+fun AppCompatActivity.createAddModeDialog(queueDialogs: QueueDialogs): AlertDialog {
     val binding = DialogRecyclerWithSimpleTextBinding.inflate(LayoutInflater.from(this))
     val groupieAdapter = GroupieAdapter()
     val section = Section()
@@ -66,6 +67,7 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                     }
                 }
                 dialog.show()
+                queueDialogs.add(dialog = dialog)
             }
             EnumAddMode.EXPENSES -> {
                 val expenditureViewModel: ExpenditureViewModel by this.viewModels()
@@ -118,11 +120,12 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                     }
                 }
                 dialog.show()
+                queueDialogs.add(dialog = dialog)
             }
             EnumAddMode.ACCUMULATIONS -> {
                 val accumulationsViewModel: AccumulationsViewModel by this.viewModels()
 
-                val dialog = this.createListAccumulationsDialog()
+                val dialog = this.createListAccumulationsDialog(queueDialogs = queueDialogs)
                 dialog.setOnShowListener { dialogInterface ->
                     val btnPositive = dialog.getButton(AlertDialog.BUTTON_POSITIVE)
                     btnPositive.setOnClickListener {
@@ -168,9 +171,11 @@ fun AppCompatActivity.createAddModeDialog(): AlertDialog {
                             }
                         }
                         dialog.show()
+                        queueDialogs.add(dialog = dialog)
                     }
                 }
                 dialog.show()
+                queueDialogs.add(dialog = dialog)
             }
         }
     }

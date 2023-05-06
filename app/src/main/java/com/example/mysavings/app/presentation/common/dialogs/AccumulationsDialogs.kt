@@ -24,12 +24,13 @@ import com.example.mysavings.domain.models.other.FailAccumulation
 import com.example.mysavings.domain.models.other.FailReplenishment
 import com.example.mysavings.domain.models.repository.Accumulation
 import com.example.mysavings.domain.usecase.accumulation.CheckCorrectAccumulationData
+import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.example.mysavings.domain.usecase.replenishment.CheckReplenishmentData
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
 import com.xwray.groupie.viewbinding.BindableItem
 
-fun AppCompatActivity.createListAccumulationsDialog(): AlertDialog {
+fun AppCompatActivity.createListAccumulationsDialog(queueDialogs: QueueDialogs): AlertDialog {
     val binding = DialogRecyclerWithSimpleTextBinding.inflate(LayoutInflater.from(this))
     val groupieAdapter = GroupieAdapter()
     val section = Section()
@@ -99,6 +100,7 @@ fun AppCompatActivity.createListAccumulationsDialog(): AlertDialog {
             }
         }
         dialog.show()
+        queueDialogs.add(dialog = dialog)
     }
 
     binding.recyclerView.apply {
@@ -188,6 +190,7 @@ fun AppCompatActivity.createListAccumulationsDialog(): AlertDialog {
                             }
                         }
                         dialogEdit.show()
+                        queueDialogs.add(dialog = dialogEdit)
                     }
                 }
             )
