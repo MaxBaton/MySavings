@@ -284,13 +284,6 @@ class MainActivity : AppCompatActivity() {
         dismissAllShowingDialogs()
     }
 
-    private fun addDialogsToQueue(dialog: AlertDialog) {
-        allShowingDialogs.add(dialog)
-        dialog.setOnDismissListener {
-            allShowingDialogs.remove(dialog)
-        }
-    }
-
     private fun dismissAllShowingDialogs() {
         allShowingDialogs.forEach {
             if (it.isShowing) {
