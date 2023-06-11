@@ -12,12 +12,17 @@ class ExpenditureDbStorage(private val expenditureDao: ExpenditureDao): Expendit
         }
     }
 
-    override suspend fun add(expenditureData: ExpenditureData): Boolean {
+    override suspend fun add(expenditureData: ExpenditureData): Int {
         return try {
             expenditureDao.add(expenditureData = expenditureData)
-            true
+            val id = expenditureDao.getIdByData(
+                date = expenditureData.date,
+                sum = expenditureData.sum,
+                description = expenditureData.description
+            )
+            id
         }catch (e: Exception) {
-            false
+            -1
         }
     }
 

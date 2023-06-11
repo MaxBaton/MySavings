@@ -5,7 +5,7 @@ import com.example.mysavings.data.models.db.ExpenditureData
 interface ExpenditureStorage {
     suspend fun getExpenses(): MutableList<ExpenditureData>?
 
-    suspend fun add(expenditureData: ExpenditureData): Boolean
+    suspend fun add(expenditureData: ExpenditureData): Int
 
     suspend fun update(expenditureData: ExpenditureData): Boolean
 

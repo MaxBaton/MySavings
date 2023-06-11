@@ -27,6 +27,7 @@ import com.example.mysavings.databinding.ItemExpenditureBinding
 import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
+import com.example.mysavings.domain.usecase.expenditure.ExpensesOperations
 import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -82,7 +83,6 @@ class MainActivity : AppCompatActivity() {
             groupieAdapter.add(section)
             recyclerViewExpenses.apply {
                 adapter = groupieAdapter
-                layoutManager = LinearLayoutManager(this@MainActivity, LinearLayoutManager.VERTICAL, false)
                 addItemDecoration(DividerItemDecoration(this@MainActivity, DividerItemDecoration.VERTICAL))
             }
 
@@ -90,18 +90,37 @@ class MainActivity : AppCompatActivity() {
                 textViewRest.text = restStr
             }
 
-            expenditureViewModel.expensesLiveData.observe(this@MainActivity) { expenses ->
-                if (expenses?.isEmpty() ?: true) {
-                    hideRecyclerHeader()
-                }else {
-                    showRecyclerHeader()
-                }
+            expenditureViewModel.expensesLiveData.observe(this@MainActivity) { _expenses ->
+                _expenses?.let { expenses ->
+                    if (expenses.isEmpty()) {
+                        hideRecyclerHeader()
+                    }else {
+                        showRecyclerHeader()
+                    }
 
-                val expenditureItems = mutableListOf<ExpenditureItem>()
-                expenses?.forEach {
-                    expenditureItems.add(ExpenditureItem(expenditure = it))
+                    val currOperation = expenditureViewModel.getCurrOperation()
+                    when(currOperation) {
+                        is ExpensesOperations.GetAll -> {
+                            val expenditureItems = getAllExpenditureItem(expenses)
+                            section.update(expenditureItems)
+                        }
+                        is ExpensesOperations.Add -> {
+                            val expenditure = currOperation.expenditure
+                            section.add(ExpenditureItem(expenditure = expenditure))
+                        }
+                        is ExpensesOperations.Edit -> {
+                            val position = currOperation.position
+                            section.notifyItemChanged(position)
+                        }
+                        is ExpensesOperations.Delete -> {
+                            val deleteExpenses = currOperation.deleteExpenses
+                            val deleteItems = getDeleteExpenditureItem(deleteExpenses)
+                            deleteItems.forEach {
+                                section.remove(it)
+                            }
+                        }
+                    }
                 }
-                section.update(expenditureItems)
             }
 
             fabAdd.setOnClickListener {
@@ -188,6 +207,7 @@ class MainActivity : AppCompatActivity() {
 
                                     expenditureViewModel.edExpenditure(
                                         expenditure = expenditure,
+                                        position = position,
                                         oldSum = oldSum,
                                         onSuccess = {
                                             editCurrRest(
@@ -282,6 +302,25 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         dismissAllShowingDialogs()
+    }
+
+    private fun getAllExpenditureItem(expenses: List<Expenditure>): List<ExpenditureItem> {
+        val expenditureItems = mutableListOf<ExpenditureItem>()
+        expenses.forEach {
+            expenditureItems.add(ExpenditureItem(expenditure = it))
+        }
+        return expenditureItems
+    }
+
+    private fun getDeleteExpenditureItem(deleteExpenses: List<Expenditure>): List<ExpenditureItem> {
+        val deleteItems = mutableListOf<ExpenditureItem>()
+        for (i in 0 until section.itemCount) {
+            val item = section.getItem(i)
+            if (item is ExpenditureItem && deleteExpenses.indexOf(item.expenditure) != -1) {
+                deleteItems.add(item)
+            }
+        }
+        return deleteItems
     }
 
     private fun dismissAllShowingDialogs() {

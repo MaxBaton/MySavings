@@ -5,7 +5,7 @@ import com.example.mysavings.domain.models.repository.Expenditure
 interface ExpenditureRepository {
     suspend fun getExpenses(): MutableList<Expenditure>?
 
-    suspend fun add(expenditure: Expenditure): Boolean
+    suspend fun add(expenditure: Expenditure): Int
 
     suspend fun update(expenditure: Expenditure): Boolean
 

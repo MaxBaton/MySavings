@@ -16,4 +16,12 @@ interface ExpenditureDao {
 
     @Delete
     fun delete(expenditureData: ExpenditureData)
+
+    @Query(
+        "select id from expendituredata " +
+                "where date = :date " +
+                "      and sum = :sum " +
+                "      and description = :description"
+    )
+    fun getIdByData(date: String, sum: Float, description: String ): Int
 }

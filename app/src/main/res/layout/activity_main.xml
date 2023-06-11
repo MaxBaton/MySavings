@@ -59,6 +59,10 @@
         app:layout_constraintTop_toBottomOf="@id/expenses_header"
         app:layout_constraintBottom_toTopOf="@id/fab_ed"
         tools:listitem="@layout/item_expenditure"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:scrollbars="vertical"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbarSize="@dimen/scrollbar_width"
          />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

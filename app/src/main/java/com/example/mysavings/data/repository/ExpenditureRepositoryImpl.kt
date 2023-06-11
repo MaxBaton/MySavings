@@ -15,12 +15,12 @@ class ExpenditureRepositoryImpl(private val expenditureStorage: ExpenditureStora
         }
     }
 
-    override suspend fun add(expenditure: Expenditure): Boolean {
+    override suspend fun add(expenditure: Expenditure): Int {
         return try {
             val expenditureData = expenditure.mapToExpenditureData()
             expenditureStorage.add(expenditureData = expenditureData)
         }catch (e: Exception) {
-            false
+            -1
         }
     }
 

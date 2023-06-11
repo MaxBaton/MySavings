@@ -1,11 +1,13 @@
 package com.example.mysavings.app.presentation.viewModel
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.repository.ExpenditureRepository
+import com.example.mysavings.domain.usecase.expenditure.ExpensesOperations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +22,8 @@ class ExpenditureViewModel @Inject constructor(
     // List Expenditure
     private val mutableExpensesLiveData = MutableLiveData<MutableList<Expenditure>?>()
     val expensesLiveData = mutableExpensesLiveData
+    // Current operation
+    private val currOperationMutableLiveData = MutableLiveData<ExpensesOperations>()
 
     init {
         getExpenses()
@@ -30,6 +34,7 @@ class ExpenditureViewModel @Inject constructor(
             val expenses = expenditureRepository.getExpenses()
             if (expenses != null) {
                 viewModelScope.launch {
+                    currOperationMutableLiveData.value = ExpensesOperations.GetAll
                     mutableExpensesLiveData.value = expenses
                 }
             }
@@ -44,9 +49,11 @@ class ExpenditureViewModel @Inject constructor(
                 description = description
             )
 
-            val isAddExpenditure = expenditureRepository.add(expenditure = expenditure)
+            val idAddExpenditure = expenditureRepository.add(expenditure = expenditure)
             viewModelScope.launch {
-                if (isAddExpenditure) {
+                if (idAddExpenditure != -1) {
+                    expenditure.id = idAddExpenditure
+                    currOperationMutableLiveData.value = ExpensesOperations.Add(expenditure = expenditure)
                     mutableExpensesLiveData.value?.add(expenditure)
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
                     onSuccess()
@@ -57,11 +64,12 @@ class ExpenditureViewModel @Inject constructor(
         }
     }
 
-    fun edExpenditure(expenditure: Expenditure, oldSum: Float, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun edExpenditure(expenditure: Expenditure, position: Int, oldSum: Float, onSuccess: () -> Unit, onError: () -> Unit) {
         scopeIO.launch {
             val isEditExpenditure = expenditureRepository.update(expenditure = expenditure)
             viewModelScope.launch {
                 if (isEditExpenditure) {
+                    currOperationMutableLiveData.value = ExpensesOperations.Edit(position = position)
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
                     onSuccess()
                 }else {
@@ -75,7 +83,7 @@ class ExpenditureViewModel @Inject constructor(
         if (expenses.isNotEmpty()) {
             scopeIO.launch {
                 var isDeleteAll = true
-                expenses.forEach { expenditure ->
+                expenses.forEachIndexed { index, expenditure ->
                     val isDelete = expenditureRepository.delete(expenditure = expenditure)
                     if (!isDelete && isDeleteAll) {
                         isDeleteAll = false
@@ -85,6 +93,7 @@ class ExpenditureViewModel @Inject constructor(
                 }
                 viewModelScope.launch {
                     if (isDeleteAll) {
+                        currOperationMutableLiveData.value = ExpensesOperations.Delete(deleteExpenses = expenses)
                         mutableExpensesLiveData.value = mutableExpensesLiveData.value
                         onSuccess()
                     }else {
@@ -93,5 +102,20 @@ class ExpenditureViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    private fun getDeletedIndexes(expenses: List<Expenditure>): List<Int> {
+        val deleteIndexes = mutableListOf<Int>()
+        mutableExpensesLiveData.value?.forEachIndexed { index, expenditure ->
+            val indexOf = expenses.indexOf(expenditure)
+            if (indexOf != -1) {
+                deleteIndexes.add(element = index)
+            }
+        }
+        return deleteIndexes
+    }
+
+    fun getCurrOperation(): ExpensesOperations {
+        return currOperationMutableLiveData.value ?: ExpensesOperations.GetAll
     }
 }
