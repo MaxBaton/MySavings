@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.mysavings.R
 import com.example.mysavings.app.presentation.common.dialogs.createAddEdExpenditureDialog
 import com.example.mysavings.app.presentation.common.dialogs.createAddEdRestDialog
@@ -27,7 +26,7 @@ import com.example.mysavings.databinding.ItemExpenditureBinding
 import com.example.mysavings.domain.models.other.FailExpenditure
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
-import com.example.mysavings.domain.usecase.expenditure.ExpensesOperations
+import com.example.mysavings.domain.usecase.expenditure.ExpenditureOperations
 import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.xwray.groupie.GroupieAdapter
 import com.xwray.groupie.Section
@@ -100,19 +99,19 @@ class MainActivity : AppCompatActivity() {
 
                     val currOperation = expenditureViewModel.getCurrOperation()
                     when(currOperation) {
-                        is ExpensesOperations.GetAll -> {
+                        is ExpenditureOperations.GetAll -> {
                             val expenditureItems = getAllExpenditureItem(expenses)
                             section.update(expenditureItems)
                         }
-                        is ExpensesOperations.Add -> {
+                        is ExpenditureOperations.Add -> {
                             val expenditure = currOperation.expenditure
                             section.add(ExpenditureItem(expenditure = expenditure))
                         }
-                        is ExpensesOperations.Edit -> {
+                        is ExpenditureOperations.Edit -> {
                             val position = currOperation.position
                             section.notifyItemChanged(position)
                         }
-                        is ExpensesOperations.Delete -> {
+                        is ExpenditureOperations.Delete -> {
                             val deleteExpenses = currOperation.deleteExpenses
                             val deleteItems = getDeleteExpenditureItem(deleteExpenses)
                             deleteItems.forEach {

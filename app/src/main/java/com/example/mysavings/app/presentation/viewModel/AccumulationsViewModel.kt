@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.mysavings.domain.models.repository.Accumulation
 import com.example.mysavings.domain.repository.AccumulationRepository
+import com.example.mysavings.domain.usecase.accumulation.AccumulationOperations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,6 +21,8 @@ class AccumulationsViewModel @Inject constructor(
     // Accumulations
     private val mutableAccumulationsLiveData = MutableLiveData<MutableList<Accumulation>>()
     val accumulationsLiveData: LiveData<MutableList<Accumulation>> = mutableAccumulationsLiveData
+    // Current operation
+    private val currOperationMutableLiveData = MutableLiveData<AccumulationOperations>()
 
     init {
         getAllAccumulations()
@@ -30,6 +33,7 @@ class AccumulationsViewModel @Inject constructor(
             val accumulations = accumulationRepository.getAccumulation()
             if (accumulations != null) {
                 viewModelScope.launch {
+                    currOperationMutableLiveData.value = AccumulationOperations.GetAll
                     accumulations?.let { mutableAccumulationsLiveData.value = it }
                 }
             }
@@ -42,9 +46,11 @@ class AccumulationsViewModel @Inject constructor(
                 name = name,
                 sum = sum
             )
-            val isAdd = accumulationRepository.add(accumulation = accumulation)
+            val idAdd = accumulationRepository.add(accumulation = accumulation)
             viewModelScope.launch {
-                if (isAdd) {
+                if (idAdd != -1) {
+                    accumulation.id = idAdd
+                    currOperationMutableLiveData.value = AccumulationOperations.Add(accumulation = accumulation)
                     mutableAccumulationsLiveData.value?.let {
                         it.add(accumulation)
                         mutableAccumulationsLiveData.value = it
@@ -72,11 +78,12 @@ class AccumulationsViewModel @Inject constructor(
         }
     }
 
-    fun deleteAccumulation(accumulation: Accumulation, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun deleteAccumulation(accumulation: Accumulation, position: Int, onSuccess: () -> Unit, onError: () -> Unit) {
         scopIO.launch {
             val isDelete = accumulationRepository.delete(accumulation = accumulation)
             viewModelScope.launch {
                 if (isDelete) {
+                    currOperationMutableLiveData.value = AccumulationOperations.Delete(position = position)
                     mutableAccumulationsLiveData.value?.remove(accumulation)
                     mutableAccumulationsLiveData.value = mutableAccumulationsLiveData.value
                     onSuccess()
@@ -87,7 +94,7 @@ class AccumulationsViewModel @Inject constructor(
         }
     }
 
-    fun editAccumulation(id: Int, sumFloat: Float, name: String, onSuccess: () -> Unit, onError: () -> Unit) {
+    fun editAccumulation(id: Int, sumFloat: Float, name: String, position: Int, onSuccess: () -> Unit, onError: () -> Unit) {
         scopIO.launch {
             val accumulation = Accumulation(
                 id = id,
@@ -97,6 +104,7 @@ class AccumulationsViewModel @Inject constructor(
             val isEdit = accumulationRepository.update(accumulation = accumulation)
             viewModelScope.launch {
                 if (isEdit) {
+                    currOperationMutableLiveData.value = AccumulationOperations.Edit(position = position)
                     val oldAccumulation = mutableAccumulationsLiveData.value?.find { it.id == id }
                     oldAccumulation?.let {
                         it.sum = sumFloat
@@ -109,5 +117,13 @@ class AccumulationsViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun getCurrOperation(): AccumulationOperations {
+        return currOperationMutableLiveData.value ?: AccumulationOperations.GetAll
+    }
+
+    fun setCurrOperations(operation: AccumulationOperations) {
+        currOperationMutableLiveData.value = operation
     }
 }

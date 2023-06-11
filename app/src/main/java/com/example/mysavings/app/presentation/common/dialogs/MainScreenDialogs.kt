@@ -18,6 +18,7 @@ import com.example.mysavings.databinding.DialogRecyclerWithSimpleTextBinding
 import com.example.mysavings.databinding.ItemSimpleTextBinding
 import com.example.mysavings.domain.models.other.FailAccumulation
 import com.example.mysavings.domain.models.other.FailExpenditure
+import com.example.mysavings.domain.usecase.accumulation.AccumulationOperations
 import com.example.mysavings.domain.usecase.accumulation.CheckCorrectAccumulationData
 import com.example.mysavings.domain.usecase.expenditure.CheckCorrectExpenditureData
 import com.example.mysavings.domain.usecase.main.QueueDialogs
@@ -124,6 +125,7 @@ fun AppCompatActivity.createAddModeDialog(queueDialogs: QueueDialogs): AlertDial
             }
             EnumAddMode.ACCUMULATIONS -> {
                 val accumulationsViewModel: AccumulationsViewModel by this.viewModels()
+                accumulationsViewModel.setCurrOperations(operation = AccumulationOperations.GetAll)
 
                 val dialog = this.createListAccumulationsDialog(queueDialogs = queueDialogs)
                 dialog.setOnShowListener { dialogInterface ->

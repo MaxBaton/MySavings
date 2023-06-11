@@ -16,4 +16,7 @@ interface AccumulationDao {
 
     @Delete
     fun delete(accumulationData: AccumulationData)
+
+    @Query("select id from accumulationdata where name = :name and sum = :sum")
+    fun getIdByData(name: String, sum: Float): Int
 }

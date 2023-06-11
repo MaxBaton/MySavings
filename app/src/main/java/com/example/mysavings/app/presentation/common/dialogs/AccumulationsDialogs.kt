@@ -23,6 +23,7 @@ import com.example.mysavings.databinding.ItemAccumulationBinding
 import com.example.mysavings.domain.models.other.FailAccumulation
 import com.example.mysavings.domain.models.other.FailReplenishment
 import com.example.mysavings.domain.models.repository.Accumulation
+import com.example.mysavings.domain.usecase.accumulation.AccumulationOperations
 import com.example.mysavings.domain.usecase.accumulation.CheckCorrectAccumulationData
 import com.example.mysavings.domain.usecase.main.QueueDialogs
 import com.example.mysavings.domain.usecase.replenishment.CheckReplenishmentData
@@ -40,11 +41,27 @@ fun AppCompatActivity.createListAccumulationsDialog(queueDialogs: QueueDialogs):
     val restViewModel: RestViewModel by this.viewModels()
 
     accumulationsViewModel.accumulationsLiveData.observe(this) { accumulations ->
-        val accumulationItems = mutableListOf<AccumulationItem>()
-        accumulations?.forEach {
-            accumulationItems.add(AccumulationItem(accumulation = it))
+        val currOperation = accumulationsViewModel.getCurrOperation()
+        when(currOperation) {
+            is AccumulationOperations.GetAll -> {
+                val accumulationItems = mutableListOf<AccumulationItem>()
+                accumulations?.forEach {
+                    accumulationItems.add(AccumulationItem(accumulation = it))
+                }
+                section.update(accumulationItems)
+            }
+            is AccumulationOperations.Add -> {
+                val accumulation = currOperation.accumulation
+                section.add(AccumulationItem(accumulation))
+            }
+            is AccumulationOperations.Delete -> {
+                val item = section.getItem(currOperation.position)
+                section.remove(item)
+            }
+            is AccumulationOperations.Edit -> {
+                section.notifyItemChanged(currOperation.position)
+            }
         }
-        section.update(accumulationItems)
     }
 
 
@@ -105,7 +122,6 @@ fun AppCompatActivity.createListAccumulationsDialog(queueDialogs: QueueDialogs):
 
     binding.recyclerView.apply {
         adapter = groupieAdapter
-        layoutManager = LinearLayoutManager(this@createListAccumulationsDialog, LinearLayoutManager.VERTICAL, false)
         addItemDecoration(DividerItemDecoration(this@createListAccumulationsDialog, DividerItemDecoration.VERTICAL))
     }
 
@@ -127,6 +143,7 @@ fun AppCompatActivity.createListAccumulationsDialog(queueDialogs: QueueDialogs):
                                 val accumulation = accumulationItem.accumulation
                                 accumulationsViewModel.deleteAccumulation(
                                     accumulation = accumulation,
+                                    position = position,
                                     onSuccess = {
                                         this@createListAccumulationsDialog.showShortToast(text = getString(R.string.toast_successful_delete))
                                     },
@@ -177,6 +194,7 @@ fun AppCompatActivity.createListAccumulationsDialog(queueDialogs: QueueDialogs):
                                             id = accumulation.id,
                                             sumFloat = sumStr.trim().toFloat(),
                                             name = name,
+                                            position = position,
                                             onSuccess = {
                                                 this@createListAccumulationsDialog.showShortToast(text = getString(R.string.toast_successful_edit))
                                             },

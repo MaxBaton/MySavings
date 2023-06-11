@@ -1,13 +1,11 @@
 package com.example.mysavings.app.presentation.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.mysavings.data.data.DefaultValues
 import com.example.mysavings.domain.models.repository.Expenditure
 import com.example.mysavings.domain.repository.ExpenditureRepository
-import com.example.mysavings.domain.usecase.expenditure.ExpensesOperations
+import com.example.mysavings.domain.usecase.expenditure.ExpenditureOperations
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +21,7 @@ class ExpenditureViewModel @Inject constructor(
     private val mutableExpensesLiveData = MutableLiveData<MutableList<Expenditure>?>()
     val expensesLiveData = mutableExpensesLiveData
     // Current operation
-    private val currOperationMutableLiveData = MutableLiveData<ExpensesOperations>()
+    private val currOperationMutableLiveData = MutableLiveData<ExpenditureOperations>()
 
     init {
         getExpenses()
@@ -34,7 +32,7 @@ class ExpenditureViewModel @Inject constructor(
             val expenses = expenditureRepository.getExpenses()
             if (expenses != null) {
                 viewModelScope.launch {
-                    currOperationMutableLiveData.value = ExpensesOperations.GetAll
+                    currOperationMutableLiveData.value = ExpenditureOperations.GetAll
                     mutableExpensesLiveData.value = expenses
                 }
             }
@@ -53,7 +51,7 @@ class ExpenditureViewModel @Inject constructor(
             viewModelScope.launch {
                 if (idAddExpenditure != -1) {
                     expenditure.id = idAddExpenditure
-                    currOperationMutableLiveData.value = ExpensesOperations.Add(expenditure = expenditure)
+                    currOperationMutableLiveData.value = ExpenditureOperations.Add(expenditure = expenditure)
                     mutableExpensesLiveData.value?.add(expenditure)
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
                     onSuccess()
@@ -69,7 +67,7 @@ class ExpenditureViewModel @Inject constructor(
             val isEditExpenditure = expenditureRepository.update(expenditure = expenditure)
             viewModelScope.launch {
                 if (isEditExpenditure) {
-                    currOperationMutableLiveData.value = ExpensesOperations.Edit(position = position)
+                    currOperationMutableLiveData.value = ExpenditureOperations.Edit(position = position)
                     mutableExpensesLiveData.value = mutableExpensesLiveData.value
                     onSuccess()
                 }else {
@@ -93,7 +91,7 @@ class ExpenditureViewModel @Inject constructor(
                 }
                 viewModelScope.launch {
                     if (isDeleteAll) {
-                        currOperationMutableLiveData.value = ExpensesOperations.Delete(deleteExpenses = expenses)
+                        currOperationMutableLiveData.value = ExpenditureOperations.Delete(deleteExpenses = expenses)
                         mutableExpensesLiveData.value = mutableExpensesLiveData.value
                         onSuccess()
                     }else {
@@ -115,7 +113,7 @@ class ExpenditureViewModel @Inject constructor(
         return deleteIndexes
     }
 
-    fun getCurrOperation(): ExpensesOperations {
-        return currOperationMutableLiveData.value ?: ExpensesOperations.GetAll
+    fun getCurrOperation(): ExpenditureOperations {
+        return currOperationMutableLiveData.value ?: ExpenditureOperations.GetAll
     }
 }

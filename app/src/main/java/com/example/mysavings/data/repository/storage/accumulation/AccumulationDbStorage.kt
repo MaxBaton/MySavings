@@ -12,12 +12,16 @@ class AccumulationDbStorage(private val accumulationDao: AccumulationDao): Accum
         }
     }
 
-    override suspend fun add(accumulationData: AccumulationData): Boolean {
+    override suspend fun add(accumulationData: AccumulationData): Int {
         return try {
             accumulationDao.add(accumulationData = accumulationData)
-            true
+            val id = accumulationDao.getIdByData(
+                name = accumulationData.name,
+                sum = accumulationData.sum
+            )
+            id
         }catch (e: Exception) {
-            false
+            -1
         }
     }
 

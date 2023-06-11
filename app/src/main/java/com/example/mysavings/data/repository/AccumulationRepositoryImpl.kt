@@ -15,12 +15,12 @@ class AccumulationRepositoryImpl(private val accumulationStorage: AccumulationSt
         }
     }
 
-    override suspend fun add(accumulation: Accumulation): Boolean {
+    override suspend fun add(accumulation: Accumulation): Int {
         return try {
             val accumulationData = accumulation.mapToAccumulationData()
             accumulationStorage.add(accumulationData = accumulationData)
         }catch (e: Exception) {
-            false
+            -1
         }
     }
 

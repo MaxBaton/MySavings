@@ -5,7 +5,7 @@ import com.example.mysavings.data.models.db.AccumulationData
 interface AccumulationStorage {
     suspend fun getAccumulation(): MutableList<AccumulationData>?
 
-    suspend fun add(accumulationData: AccumulationData): Boolean
+    suspend fun add(accumulationData: AccumulationData): Int
 
     suspend fun update(accumulationData: AccumulationData): Boolean
 
